@@ -1,0 +1,51 @@
+import mensajeria.*
+import paquetes.*
+import mensajeros.*
+describe "Tests de mensajeros y destinos con paquetes" {
+  test "roberto puede llevar un paquete que está pago en un camión que tiene un acoplado." {
+    roberto.cambiarVehiculo(camion)
+    camion.agregarAcoplados()
+    paquetito.agregarDestino(puenteBrooklyn)
+    assert.that(paquetito.puedeSerLlevado(roberto))
+  }
+
+  test "neo con crédito no puede llevar un paquete que no está pago a la matrix." {
+    neo.cargarCredito()
+    paqueteOriginal.agregarDestino(matrix)
+    assert.notThat(paqueteOriginal.puedeSerLlevado(neo))
+  }
+}
+
+describe "Test de mensajeria" {
+  test "La mensajeria contrata a Neo" {
+    mensajeria.contratarMensajero(neo)
+    assert.that(mensajeria.elMensajeroEstaContratado(neo))
+  }
+  test "La mensajeria despide a Neo" {
+    mensajeria.contratarMensajero(neo)
+    mensajeria.despedirMensajero(neo)
+    assert.notThat(mensajeria.elMensajeroEstaContratado(neo))
+  }
+  test "La mensajeria despide a Neo y Roberto" {
+    mensajeria.contratarMensajero(neo)
+    mensajeria.contratarMensajero(roberto)
+    mensajeria.despedirATodos()
+    assert.notThat(mensajeria.elMensajeroEstaContratado(neo))
+    assert.notThat(mensajeria.elMensajeroEstaContratado(roberto))
+  }
+  test "La mensajeria es grande" {
+    mensajeria.contratarMensajero(neo)
+    mensajeria.contratarMensajero(roberto)
+    mensajeria.contratarMensajero(chuckNorris)
+    assert.that(mensajeria.esMensajeriaGrande())
+  }
+  test "El primer paquete no puede ser entregado por el primer empleado (neo)" {
+    mensajeria.contratarMensajero(neo)
+    paquetito.agregarDestino(matrix)
+    assert.notThat(mensajeria.puedeSerEntregadoPorElPrimerEmpleado(paquetito))
+  }
+  test "El peso del ultimo mensajero de la empresa" {
+    mensajeria.contratarMensajero(neo)
+    assert.equals(0, mensajeria.pesoDelUltimoMensajero())
+  }
+}
